@@ -1,0 +1,108 @@
+<mvc:View controllerName="estudovizframetimescolumn.controller.View1" 
+xmlns:chart="sap.suite.ui.commons" 
+xmlns:core="sap.ui.core"
+xmlns:form="sap.ui.layout.form" 
+xmlns:html="http://www.w3.org/1999/xhtml" 
+xmlns:layout="sap.ui.layout" 
+xmlns:mvc="sap.ui.core.mvc"
+xmlns:viz="sap.viz.ui5.controls" 
+xmlns:vizData="sap.viz.ui5.data" 
+xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds" 
+xmlns="sap.m">
+<App>
+<pages>
+<Page title="{i18n>TituloPagina}">
+<content>
+
+<!-- inicio do container com gráfico -->
+<chart:ChartContainer autoAdjustHeight="true" 
+                      id="chartContainer"  
+                      title="Titulo do Container">
+<chart:ChartContainerContent icon="sap-icon://horizontal-stacked-chart">
+                             
+<chart:content>
+
+<viz:VizFrame height="" 
+              id="idVizFrame" 
+              uiConfig="{applicationSet:'fiori'}" 
+              vizProperties="{plotArea: { drawingEffect: 'glossy', dataPointSize: {min : 40, max : 40}}, 
+                             title:{ text:'Titulo do Frame'}, 
+                             dataLabel:{visible:true,showTotal:true},
+                             timeAxis:{title:{visible: false},levels:['year']},
+                             valueAxis:{title:{visible: false}},
+                             window:{start: 'firstDataPoint',end: 'lastDataPoint'}}"                            
+              vizType="timeseries_column">  
+               <!--timeAxis:{title:{visible: false},levels:['hour']} final do Viz properties-->
+               <!-- https://blogs.sap.com/2020/03/03/vizframe-charts-and-its-various-properties-features-in-sapui5/--> 
+
+<viz:dataset>
+<vizData:FlattenedDataset data="{/itens}">
+
+<vizData:dimensions>
+<vizData:DimensionDefinition name="Year" value="{Year}" dataType="date"/>
+</vizData:dimensions>
+
+<vizData:measures>
+<vizData:MeasureDefinition name="SAP" value="{SAP}"/>
+<vizData:MeasureDefinition name="SAPUI5" value="{SAPUI5}"/>
+<vizData:MeasureDefinition name="ABAP" value="{ABAP}"/>
+<vizData:MeasureDefinition name="JAVA" value="{JAVA}"/>
+</vizData:measures>
+</vizData:FlattenedDataset>
+</viz:dataset>
+
+<viz:feeds>
+<vizFeeds:FeedItem type="Measure" uid="valueAxis" values="JAVA,ABAP,SAPUI5,SAP" />
+<vizFeeds:FeedItem type="Dimension" uid="timeAxis" values="Year"/> <!-- categoryAxis -->
+</viz:feeds>
+
+</viz:VizFrame>
+
+
+</chart:content>
+</chart:ChartContainerContent>
+
+<!-- fim do container com gráfico -->
+
+<!-- inicio do container com tabela com os dados do grafico-->
+<chart:ChartContainerContent icon="sap-icon://table-view" title="Table">
+<chart:content>
+<Table id="chartContainerContentTable" items="{ path: '/itens' }">
+<columns>
+<Column demandPopin="true">
+<Label design="Bold" text="{i18n>Year}"/></Column>
+<Column demandPopin="true">
+<Label design="Bold" text="{i18n>SAP}"/></Column>
+<Column demandPopin="true">
+<Label design="Bold" text="{i18n>SAPUI5}"/></Column>
+<Column demandPopin="true">
+<Label design="Bold" text="{i18n>ABAP}"/></Column>
+<Column demandPopin="true">
+<Label design="Bold" text="{i18n>JAVA}"/></Column>
+</columns>
+<ColumnListItem press="">
+<Text text="{path: 'Year',
+			type: 'sap.ui.model.type.Date',
+			formatOptions: {
+				source: {
+					pattern: 'yyyy-MM-ddTHH:mm:ss'
+				},
+				pattern: 'YYYY'
+			} }"></Text>  
+<Text text="{SAP}"></Text>
+<Text text="{SAPUI5}"></Text>
+<Text text="{ABAP}"></Text>
+<Text text="{JAVA}"></Text>
+</ColumnListItem>
+</Table>
+</chart:content>
+</chart:ChartContainerContent>
+<!-- fim do container com tabela com os dados do grafico-->
+
+</chart:ChartContainer>
+
+</content>
+</Page>
+</pages>
+</App>
+</mvc:View>
